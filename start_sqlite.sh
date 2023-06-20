@@ -1,2 +1,4 @@
 #!/bin/bash
-echo .read ./in | sqlite3 > out 
+echo ".output out
+.read ./in
+" | sqlite3 & 
