@@ -2,3 +2,4 @@
 *.swo
 *.swq
 db
+.pilrc
