@@ -2,18 +2,18 @@
 
 #(symbols 'sql 'pico)
 (setq *MSG_POSTFIX ";\n.read ./in\n")
-(setq *TO_DB "in" *FROM_DB "out") 
+(setq *TO_PROC "in" *FROM_PROC "out") 
 
 (class +Pipe)
   (dm T (Proc Opts)
-    (call 'mkfifo *TO_DB *FROM_DB)  
-    (push '*Bye '(call 'rm *TO_DB *FROM_DB))
+    (call 'mkfifo *TO_PROC *FROM_PROC)  
+    (push '*Bye '(call 'rm *TO_PROC *FROM_PROC))
     (call Proc)
   )
 
   (dm msg> (Msg Cb) #message, callback
-    (in *FROM_DB
-      (out *TO_DB (prinl Msg *MSG_POSTFIX))
+    (in *FROM_PROC
+      (out *TO_PROC (prinl Msg *MSG_POSTFIX))
       (Cb (read))
     )
     (flush)
