@@ -1,11 +1,17 @@
 
-
+(load 'util.l)
 (setq *MSG_POSTFIX ";\n.read ./in\n")
 (setq *TO_PROC "in" *FROM_PROC "out") 
 
 (class +Pipe)
-  (dm T (Proc Opts)
-    (=: msg_postfix (cdr (assoc "msg_postfix" Opts)))
+#  (dm T (Proc Opts)
+#    (=: msg_postfix (cdr (assoc "msg_postfix" Opts)))
+#    (call 'mkfifo *TO_PROC *FROM_PROC)  
+#    (push '*Bye '(call 'rm *TO_PROC *FROM_PROC))
+#    (call Proc)
+#  )
+
+  (dm T add_opts '(Proc) 
     (call 'mkfifo *TO_PROC *FROM_PROC)  
     (push '*Bye '(call 'rm *TO_PROC *FROM_PROC))
     (call Proc)
@@ -20,6 +26,6 @@
   )
 
 (if *Dbg
-  (setq x (new '(+Pipe) "./start_sqlite.sh" '(("msg_postfix" . ";\n.read ./in\n"))))
-  (send 'msg> x "select 'x';" '((str) (prinl str)) )
+#  (setq x (new '(+Pipe) "./start_sqlite.sh" '(("msg_postfix" . ";\n.read ./in\n"))))
+#  (send 'msg> x "select 'x';" '((str) (prinl str)) )
 )

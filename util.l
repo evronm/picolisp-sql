@@ -1,10 +1,14 @@
 
 #(symbols 'util 'pico)
-(de add_opts (Args Prg)
+(de opts_lamb (Args Prg)
    (cons
       (conc Args '(Opts))
       (list
          '(for X Opts
             (put This (car X) (cdr x)) )
-         (val 'Prg) ) ) )
+         Prg ) ) )
+
+(if *Dbg
+  
+)
 
