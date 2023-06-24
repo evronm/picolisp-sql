@@ -5,7 +5,6 @@
 
 (class +Pipe)
   (dm T (Proc Opts)
-    (setq foo (cdr (assoc "msg_postfix" Opts)))
     (=: msg_postfix (cdr (assoc "msg_postfix" Opts)))
     (call 'mkfifo *TO_PROC *FROM_PROC)  
     (push '*Bye '(call 'rm *TO_PROC *FROM_PROC))
