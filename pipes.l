@@ -11,11 +11,14 @@
   )
 
   (dm msg> (Msg Cb) #message, callback
-    (in *FROM_PROC
+    (prog1 (in *FROM_PROC  #ugly, but need to flush after...
       (out *TO_PROC (prinl Msg (: msg_postfix)))
       (Cb (read))
     )
-    (flush)
+    (flush))
+  )
+  (dm q> (Sql) 
+    (send 'msg> This Sql '((x) x))
   )
 
 (if *Dbg
