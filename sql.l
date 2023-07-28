@@ -32,6 +32,21 @@
   )
 )
 
+(de q (Db Query)
+  (use Res
+     (unless
+        (= SQLITE_OK
+           (sqlite3_prepare_v2 Db
+              Query
+              -1 'Res 0 ) )
+        (quit "Failed to fetch data" (sqlite3_errmsg DB)) 
+      )
+     (when (= SQLITE_ROW (sqlite3_step Res))
+        (prinl (sqlite3_column_text Res 0)) )
+     (sqlite3_finalize Res) 
+   )
+)
+
 
 (if *Dbg
 )
