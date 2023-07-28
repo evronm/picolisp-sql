@@ -1,5 +1,12 @@
 (symbols 'util 'pico)
 
+(de foldl (Fun Lst Init)
+  (if (= () Lst)
+    Init
+    (foldl Fun (cdr Lst) ( Fun (car Lst) Init) )
+  )
+)
+
 (de surr (Str Surr)
   (let (Close (
     case Surr

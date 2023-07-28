@@ -1,29 +1,36 @@
 
-(load 'capi.l 'util.l 'pipes.l)
+(load 'capi.l 'util.l 'lib/sqlite.l)
 
-(symbols 'sql 'pico)
+(symbols 'sql 'sqlite 'pico 'util)
 
 (de sanitize (Val)
   (if (num? Val)
     Val
-    (list "'" (replace (chop Val) "'" "\\'") "'" )
+    (surr (replace (chop Val) "'" "\\'") "'" )
   )
 )
+
 (de parametrize (Sql . @)
-  (mapcar '((E) (append E (list (sanitize (next) ) ) ) ) (split (chop Sql) '?))
+  (setq Parts (split (chop Sql) '?))
+  (append 
+    (mapcar 
+      '((L)
+        (list L (sanitize (next))) 
+      )
+      (head -1 Parts)
+    )
+    (tail 1 Parts)
+  )
 )
 
-(class +Db)
-  (dm T (Nm)
-    #(=: handle (open_sqlite Nm)
-    (setq  (new '(+Pipe) "./start_sqlite.sh" '(("msg_postfix" . ";\n.read ./in\n"))))
-
+(de start_db (Nm)
+  (let Res (sqlite3_open Nm)
+    (unless (= SQLITE_OK (car Res))
+      (quit "Cannot open database" (sqlite3_errmsg (cdr Res)))
+    )
+    (cdr Res)
   )
-  (dm q> (Sql Vals)
-    
-  )
-  (dm close> ()
-  )
+)
 
 
 (if *Dbg
