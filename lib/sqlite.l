@@ -53,6 +53,12 @@ sqlite3_column_text sqlite3_finalize sqlite3_close)
 (de sqlite3_column_text (Res Col)
    (native *SqLib "sqlite3_column_text" 'S Res Col) )
 
+(de sqlite3_column_count (Res)
+   (native *SqLib "sqlite3_column_count" 'I Res) )
+
+(de sqlite3_column_name (Res Col)
+   (native *SqLib "sqlite3_column_name" 'S Res Col) )
+
 (de sqlite3_finalize (Res)
    (native *SqLib "sqlite3_finalize" 'I Res) )
 

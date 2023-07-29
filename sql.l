@@ -11,15 +11,17 @@
 )
 
 (de parametrize (Sql . @)
-  (setq Parts (split (chop Sql) '?))
-  (append 
-    (mapcar 
-      '((L)
-        (list L (sanitize (next))) 
+  (setq Parts (util~sc Sql) '?)
+  (pack 
+    (append 
+      (mapcar 
+        '((L)
+          (list L (sanitize (next))) 
+        )
+        (head -1 Parts)
       )
-      (head -1 Parts)
+      (tail 1 Parts)
     )
-    (tail 1 Parts)
   )
 )
 
@@ -48,11 +50,14 @@
 )
 
 (de q (Db Query Vals)
+  (setq Q (get_query Db (parametrize Query Vals)))
+  (setq Ncols (sqlite3_column_count Q))
+
+
   (sqlite3_finalize Res) 
 )
 
 
 (if *Dbg
   (setq DB (get_db 'foo.db))
-  (sqlite~sqlite3_prepare_v2 DB "select * from sqlite_master;" -1 'Res 0)
 )
