@@ -23,30 +23,37 @@
   )
 )
 
-(de start_db (Nm)
+(de get_db (Nm)
   (let Res (sqlite3_open Nm)
-    (unless (= SQLITE_OK (car Res))
-      (quit "Cannot open database" (sqlite3_errmsg (cdr Res)))
-    )
-    (cdr Res)
+    (unless (= SQLITE_OK (car Res)) (quit "Cannot open database" (sqlite3_errmsg (cdr Res))))
+    (cadr Res)
   )
 )
 
-(de q (Db Query)
-  (use Res
-     (unless
-        (= SQLITE_OK
-           (sqlite3_prepare_v2 Db
-              Query
-              -1 'Res 0 ) )
-        (quit "Failed to fetch data" (sqlite3_errmsg DB)) 
-      )
-     (when (= SQLITE_ROW (sqlite3_step Res))
-        (prinl (sqlite3_column_text Res 0)) )
-     (sqlite3_finalize Res) 
-   )
+(de get_query (Db Query Vals) 
+  (unless (= SQLITE_OK (sqlite3_prepare_v2 Db Query -1 'Res 0 ) ) (quit "Failed to fetch data" (sqlite3_errmsg DB)) )
+  Res
+)
+
+(de get_row (Query)
+  (when (= SQLITE_ROW (sqlite3_step Res)) Res )
+)
+
+(de parse_col_defs (Sql)
+ (mapcar '((P) (mapcar 'pack (cdr (split  P " "))) ) (split (chop (pack " " (nth ( member "(" (chop Sql)) 2 ))) ",") )
+  
+)
+
+(de get_col_defs (Db Tbl)
+  (parse_col_defs (sqlite3_column_text (get_row (get_query Db (pack "select * from sqlite_master where type='table' and name='" Tbl "'"))) 4 ))
+)
+
+(de q (Db Query Vals)
+  (sqlite3_finalize Res) 
 )
 
 
 (if *Dbg
+  (setq DB (get_db 'foo.db))
+  (sqlite~sqlite3_prepare_v2 DB "select * from sqlite_master;" -1 'Res 0)
 )
