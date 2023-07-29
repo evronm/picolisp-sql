@@ -1,5 +1,8 @@
 (symbols 'util 'pico)
 
+(de sc (Str Sep)
+  (split (chop Str) Sep)
+)
 (de foldl (Fun Lst Init)
   (if (= () Lst)
     Init

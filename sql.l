@@ -40,8 +40,7 @@
 )
 
 (de parse_col_defs (Sql)
- (mapcar '((P) (mapcar 'pack (cdr (split  P " "))) ) (split (chop (pack " " (nth ( member "(" (chop Sql)) 2 ))) ",") )
-  
+ (mapcar '((P) (mapcar 'pack (cdr (split  P " "))) ) (util~sc (pack " " (nth ( member "(" (chop Sql)) 2 )) ",") )
 )
 
 (de get_col_defs (Db Tbl)
