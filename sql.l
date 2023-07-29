@@ -49,6 +49,14 @@
   (parse_col_defs (sqlite3_column_text (get_row (get_query Db (pack "select * from sqlite_master where type='table' and name='" Tbl "'"))) 4 ))
 )
 
+(de get_col_names (Q)
+  (mapcar '((N) 
+      (sqlite3_column_name Q N)
+    )
+    (range 0 (- (sqlite3_column_count Q) 1))
+  )
+)
+
 (de q (Db Query Vals)
   (setq Q (get_query Db (parametrize Query Vals)))
   (setq Ncols (sqlite3_column_count Q))
