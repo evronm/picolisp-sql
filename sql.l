@@ -37,8 +37,8 @@
   Res
 )
 
-(de get_row (Query)
-  (when (= SQLITE_ROW (sqlite3_step Res)) Res )
+(de get_row (Row)
+  (when (= SQLITE_ROW (sqlite3_step Row)) Row )
 )
 
 (de parse_col_defs (Sql)
@@ -52,9 +52,20 @@
 (de q (Db Query Vals)
   (setq Q (get_query Db (parametrize Query Vals)))
   (setq Ncols (sqlite3_column_count Q))
-
-
-  (sqlite3_finalize Res) 
+  (prog1 
+    (make
+      (while (get_row Q)
+        (chain
+          (mapcar '((N)
+              (sqlite3_column_text @ N)
+            )
+            (range 0 (- Ncols 1))
+          )
+        )
+      )
+    )
+    (sqlite3_finalize Res) 
+  )
 )
 
 
