@@ -72,4 +72,5 @@
   (setq DB (get_db 'foo.db))
   (get_row (get_query DB "create table foo (id int, foo text, dt date)"))
   (get_row (get_query DB "insert into foo values (1, 'asdf', '20220101')"))
+  (assert (= (q DB "select * from foo")  '(1 asdf 20220101) ))
 )
