@@ -23,9 +23,9 @@
 )
 
 (if *Dbg
-  ~(assert (= "xasdfx" (util~surr "asdf" "x")))
-  ~(assert (= "(asdf)" (util~surr "asdf" "(")))
-  ~(assert (= "[asdf]" (util~surr "asdf" "[")))
-  ~(assert (= "{asdf}" (util~surr "asdf" "{")))
+  ~(assert (= "xasdfx" (surr "asdf" "x")))
+  ~(assert (= "(asdf)" (surr "asdf" "(")))
+  ~(assert (= "[asdf]" (surr "asdf" "[")))
+  ~(assert (= "{asdf}" (surr "asdf" "{")))
 )
 
