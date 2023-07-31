@@ -22,10 +22,20 @@
   )
 )
 
-(if *Dbg
+(de disp (Msg Obj . @)
+    (ifn (try Msg Obj (rest))
+      (send 'method_missing> Obj Msg (rest))
+    )
+)
+
+(when *Dbg
   ~(assert (= "xasdfx" (surr "asdf" "x")))
   ~(assert (= "(asdf)" (surr "asdf" "(")))
   ~(assert (= "[asdf]" (surr "asdf" "[")))
   ~(assert (= "{asdf}" (surr "asdf" "{")))
+  (class +Test)
+    (dm method_missing> (Meth . @)
+      (list Meth (rest))
+    )
 )
 
