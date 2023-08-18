@@ -122,10 +122,11 @@ int sqDefs(void) {
 )
 
 (de q (Db Query Vals)
-  (setq Q (get_query Db (parametrize Query Vals)))
-  (setq Ncols (sqlite3_column_count Q))
   (prog1 
-    (make (while (get_row Q) (chain (list (mapcar '((N) (sqlite3_column_text @ N)) (range 0 (- Ncols 1) ) ) ) ) ) ) 
+    (let (Q (get_query Db (parametrize Query Vals)) Ncols (sqlite3_column_count Q))
+      (make (while (get_row Q) (chain (list (mapcar '((N) (sqlite3_column_text @ N)) (range 0 (- Ncols 1) ) ) ) ) ) 
+        (yoke (get_col_names Q))) 
+    )
     (sqlite3_finalize Res) 
   )
 )
