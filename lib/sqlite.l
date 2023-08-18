@@ -1,6 +1,8 @@
 # 28jul23 Software Lab. Alexander Burger
 # pil @lib/sqlite.l  --symbols sqlite  +
 
+####### THE IMPORTANT FUNCTION IS q AT THE BOTTOM ############
+
 (load "@lib/clang.l")
 (load "lib/util.l")
 
@@ -123,16 +125,16 @@ int sqDefs(void) {
   (setq Q (get_query Db (parametrize Query Vals)))
   (setq Ncols (sqlite3_column_count Q))
   (prog1 
-    (make (while (get_row Q) (chain (mapcar '((N) (sqlite3_column_text @ N)) (range 0 (- Ncols 1) ) ) ) ) )
+    (make (while (get_row Q) (chain (list (mapcar '((N) (sqlite3_column_text @ N)) (range 0 (- Ncols 1) ) ) ) ) ) ) 
     (sqlite3_finalize Res) 
   )
 )
 
 
-(when *Dbg 
+#{(when *Dbg 
   (finish (sqlite3_close DB) (%@ "unlink" NIL 'foo.db))
   (setq DB (get_db 'foo.db))
   (get_row (get_query DB "create table foo (id int, foo text, dt date)"))
   (get_row (get_query DB "insert into foo values (1, 'asdf', '20220101')"))
   (assert (= (q DB "select * from foo")  '(1 asdf 20220101) ))
-)
+)}#
